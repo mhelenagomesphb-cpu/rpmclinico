@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raio → RPM (RCF 200)</title>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.14);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,.75);
+      --accent: #5eead4;
+      --accent2: #60a5fa;
+      --danger: #ff6b6b;
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(96,165,250,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 20%, rgba(94,234,212,.25), transparent 55%),
+        linear-gradient(180deg, #070b14, var(--bg));
+      padding: 26px 14px 70px;
+    }
+
+    .wrap{ width: min(860px, 100%); }
+
+    /* Topo / Boas-vindas */
+    .hero{
+      border: 1px solid var(--border);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+    }
+
+    .badge{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    h1{
+      margin: 10px 0 6px;
+      font-size: 30px;
+      letter-spacing: .2px;
+      line-height: 1.15;
+    }
+
+    .subtitle{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+      max-width: 74ch;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    @media (min-width: 820px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .info{
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .info b{ color: var(--text); }
+
+    .ctaRow{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 650;
+      font-size: 15px;
+      color: #06111c;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: transform .08s ease, filter .2s ease;
+      text-decoration: none;
+      min-width: 190px;
+    }
+    .btn:hover{ filter: brightness(1.05); }
+    .btn:active{ transform: translateY(1px); }
+
+    .btnGhost{
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .divider{
+      height: 18px;
+    }
+
+    /* Calculadora */
+    .calcWrap{
+      margin-top: 18px;
+      width: min(560px, 100%);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    h2{
+      margin: 0 0 14px;
+      font-size: 22px;
+      letter-spacing: .2px;
+    }
+
+    .card{
+      border: 1px solid var(--border);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+    }
+
+    small{ color: var(--muted); display: block; line-height: 1.4; }
+
+    label{
+      display:block;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    input{
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.20);
+      color: var(--text);
+      outline: none;
+    }
+    input:focus{
+      border-color: rgba(94,234,212,.65);
+      box-shadow: 0 0 0 4px rgba(94,234,212,.15);
+    }
+
+    button{
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 650;
+      border: 0;
+      border-radius: 12px;
+      color: #06111c;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      cursor: pointer;
+      transition: transform .08s ease, filter .2s ease;
+    }
+    button:hover{ filter: brightness(1.05); }
+    button:active{ transform: translateY(1px); }
+
+    .result{
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      font-size: 18px;
+    }
+
+    .error{ color: var(--danger); font-weight: 600; }
+
+    .footNote{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    /* Toast (pop-up) */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(20px) scale(0.98);
+      opacity: 0;
+      pointer-events: none;
+
+      width: min(520px, calc(100% - 24px));
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+      transition: opacity .2s ease, transform .25s ease;
+    }
+
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .toast-title{ font-weight: 750; margin-bottom: 4px; }
+    .toast-text{ color: var(--muted); }
+
+    @media (prefers-reduced-motion: reduce){
+      .toast, .toast.show{ transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- Boas-vindas / Explicação -->
+    <section class="hero">
+      <div class="badge">🧪 Calculadora clínica • RCF → RPM</div>
+
+      <h1>Seja bem-vindo(a)!</h1>
+      <p class="subtitle">
+        Este site foi criado para ajudar a encontrar o <b>RPM (rotações por minuto)</b> adequado da sua centrífuga
+        a partir do <b>raio do rotor</b>, usando um valor de <b>RCF fixo</b> (força centrífuga relativa).
+      </p>
+
+      <div class="grid">
+        <div class="info">
+          <b>Para que serve?</b><br>
+          Em protocolos como os utilizados em odontologia (ex.: bioestimulação e regeneração tecidual),
+          é comum preparar amostras em centrífuga para obter componentes que auxiliem o procedimento.
+          Como cada centrífuga pode ter um raio diferente, o <b>RPM necessário muda</b>.
+        </div>
+
+        <div class="info">
+          <b>Como usar?</b><br>
+          Role a página até a calculadora e digite o <b>raio da sua centrífuga em cm</b>.
+          Pronto: o site calcula automaticamente o <b>RPM necessário</b> para atingir o RCF definido.
+          (Aqui o RCF está fixo em <b>200</b>.)
+        </div>
+      </div>
+
+      <div class="ctaRow">
+        <a class="btn" href="#calculadora">Ir para a calculadora ↓</a>
+        <a class="btn btnGhost" href="#como-medir">Como medir o raio</a>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Dica rápida de como medir o raio -->
+    <section class="hero" id="como-medir" style="margin-top: 14px;">
+      <div class="badge">📏 Dica rápida</div>
+      <h1 style="font-size:22px; margin-top:10px;">Como medir o raio (r)</h1>
+      <p class="subtitle" style="max-width: 90ch;">
+        Meça a distância do <b>centro de rotação</b> até o ponto onde fica a amostra (normalmente até o fundo do tubo
+        na posição de centrifugação). Use <b>centímetros (cm)</b>.
+      </p>
+    </section>
+
+    <!-- Calculadora -->
+    <div class="calcWrap" id="calculadora">
+      <h2>Calculadora: raio (cm) → RPM</h2>
+
+      <div class="card">
+        <small>RCF fixo: <b>200</b>. Digite o raio em <b>cm</b>.</small>
+
+        <label for="raio">Raio (cm)</label>
+        <input id="raio" type="number" step="0.01" min="0" placeholder="Ex.: 10" />
+
+        <button onclick="calcular()">Calcular RPM</button>
+
+        <div class="result" id="saida">Resultado aparecerá aqui.</div>
+
+        <div class="footNote">
+          Fórmula usada: RCF = 1,118×10⁻⁵ × r × RPM² (r em cm).<br>
+          Este site é informativo e não substitui protocolos e orientações do fabricante/equipe clínica.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast popup -->
+  <div id="toast" class="toast" aria-live="polite" aria-atomic="true">
+    <div class="toast-title" id="toastTitle">Resultado</div>
+    <div class="toast-text" id="toastText"></div>
+  </div>
+
+  <script>
+    const RCF = 200;
+    const K = 1.118e-5;
+
+    let toastTimer = null;
+
+    function mostrarToast(titulo, texto) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastTitle").textContent = titulo;
+      document.getElementById("toastText").textContent = texto;
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2800);
+    }
+
+    function calcular() {
+      const r = parseFloat(document.getElementById("raio").value);
+      const saida = document.getElementById("saida");
+
+      if (!r || r <= 0) {
+        saida.innerHTML = '<span class="error">Digite um raio válido (maior que 0).</span>';
+        return;
+      }
+
+      const rpm = Math.sqrt(RCF / (K * r));
+      const rpmArred = Math.round(rpm);
+
+      saida.innerHTML = `RPM necessário: <b>${rpmArred.toLocaleString("pt-BR")}</b> rpm`;
+      mostrarToast("Cálculo concluído ✅", `RPM necessário: ${rpmArred.toLocaleString("pt-BR")} rpm`);
+    }
+  </script>
+</body>
+</html>
